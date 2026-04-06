@@ -1,0 +1,15 @@
+{
+  "name": "captcha-illusion",
+  "version": "1.0.0",
+  "description": "Captcha Illusion Demonstration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2"
+  }
+}

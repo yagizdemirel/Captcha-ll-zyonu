@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha İllüzyonu Demo V2</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <button class="tab-btn active" data-target="simulation">🖥️ Simülasyon</button>
+        <button class="tab-btn" data-target="dashboard">📊 Admin Dashboard (V2)</button>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>Captcha <span>İllüzyonu</span></h1>
+            <p>UI üzerindeki tikin tek başına bir şey ifade etmediğini ve Rate Limiting defansını kanıtlayan Güvenlik V2 demosu.</p>
+        </header>
+
+        <!-- VIEW 1: SIMULATION -->
+        <div id="simulation-view" class="view-panel active-view">
+            <div class="main-content">
+                <div class="glass-panel login-panel">
+                    <h2>Admin Girişi</h2>
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label for="username">Kullanıcı Adı</label>
+                            <input type="text" id="username" value="admin" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="password">Şifre</label>
+                            <input type="password" id="password" value="admin" required>
+                        </div>
+
+                        <!-- Mock Captcha Widget -->
+                        <div class="captcha-container" id="captchaWidget">
+                            <label class="captcha-checkbox">
+                                <input type="checkbox" id="captchaCheck">
+                                <span class="checkmark"></span>
+                                Ben robot değilim
+                            </label>
+                            <div class="captcha-logo">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 18V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                        </div>
+                        <input type="hidden" id="captchaToken" value="">
+
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-danger" id="btnVulnerable">
+                                Login (Zafiyetli Backend)
+                            </button>
+                            <button type="button" class="btn btn-success" id="btnSecure">
+                                Login (Güvenli Backend)
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="glass-panel simulation-panel">
+                    <h2>Otomasyon & Bot Simülatörü</h2>
+                    <p>Bir bot GUI'ye ihtiyaç duymaz. Direkt sunucuya HTTP paketi fırlatır.</p>
+                    
+                    <button id="btnBotAttack" class="btn btn-outline" title="GUI'ı paspas edip sunucuya tokensız POST atar.">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: -4px; margin-right: 5px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        Bot: Doğrudan API'ye Saldır (Tekil)
+                    </button>
+
+                    <!-- V2: Brute Force Button -->
+                    <button id="btnBruteForce" class="btn btn-warning" title="Aynı anda 15 ardışık sahte istek yollar.">
+                        🔥 Brute Force: Saniyede 15 İstek (Flood)
+                    </button>
+                    
+                    <div class="console-box" id="consoleOutput">
+                        <div class="console-line">> Sisteme hazır... V2 Firewall Aktif.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: ADMIN DASHBOARD -->
+        <div id="dashboard-view" class="view-panel">
+            <div class="glass-panel dashboard-panel">
+                <div class="dash-header">
+                    <h2>Güvenlik Duvarı İstatistikleri</h2>
+                    <button id="btnRefreshDash" class="btn btn-sm btn-outline">🔄 Yenile</button>
+                    <button id="btnResetDash" class="btn btn-sm btn-danger" style="margin-left:10px;">🗑️ Sıfırla</button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Toplam İstek</h3>
+                        <p id="statTotal">0</p>
+                    </div>
+                    <div class="stat-card danger">
+                        <h3>Kaçak / Zafiyetli Giriş</h3>
+                        <p id="statVulnerable">0</p>
+                    </div>
+                    <div class="stat-card success">
+                        <h3>Güvenli Giriş (Token+Creds)</h3>
+                        <p id="statSuccess">0</p>
+                    </div>
+                    <div class="stat-card warning">
+                        <h3>Engellendi (Token)</h3>
+                        <p id="statCaptchaBlock">0</p>
+                    </div>
+                    <div class="stat-card alert">
+                        <h3>Engellendi (Rate Limit / IP Ban)</h3>
+                        <p id="statRateBlock">0</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom:1rem; border-bottom: 1px solid var(--panel-border); padding-bottom:0.5rem; margin-top:2rem;">Canlı Atak Kayıtları (Audit Logs)</h3>
+                <div class="table-container">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th>Zaman</th>
+                                <th>Uç Nokta (Endpoint)</th>
+                                <th>Tetikleyici</th>
+                                <th>Durum</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody">
+                            <!-- Logs will be populated here via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
