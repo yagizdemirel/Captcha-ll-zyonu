@@ -109,3 +109,19 @@ Healthy open-source engineering demands discipline, CI/CD, and properly formatte
 > _"Bu sistem statik bir kağıt sınavı değil, canlı bir yazılım ekosistemidir. Siz commit atmasanız bile sistem periyodik olarak açık kaynak sağlık taramasını tekrarlar. Kodunuz yerinde saysa da teknoloji ve beklentiler ilerler."_ — **K. Arasteh**
 
 You can continuously improve your repository up until the final deadline. Pushing cleanly structured commits and refactoring your architecture will immediately trigger the AI engine to update your metrics dynamically.
+
+---
+
+## 🤖 AI Agentic Code Review (Deep-Dive)
+
+### 🧠 Code Quality & Architecture
+**Rating**: 🌟 Very Good (CAPTCHA Security Lab with Dashboard)
+A comprehensive CAPTCHA bypass demonstration with an Express backend, attack logging dashboard, and dual-mode endpoints. Includes rate limiting, in-memory statistics tracking, and real-time attack log visualization.
+
+### 🛡️ Security Implementation
+- **Vulnerable Endpoint**: No CAPTCHA verification — direct login allows bot attacks
+- **Secure Endpoint**: Token-based CAPTCHA validation + rate limiting (3 req/10s)
+- **Attack Dashboard**: Real-time metrics showing blocked/successful attempts
+- **Statistics Engine**: Tracks total requests, blocked CAPTCHA, blocked rate limit, successful/vulnerable logins
+
+**Verdict**: A well-implemented CAPTCHA security lab with practical dashboard visualization. The combination of CAPTCHA + rate limiting demonstrates defense-in-depth.
